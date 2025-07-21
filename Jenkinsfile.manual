@@ -1,21 +1,20 @@
 pipeline {
     agent any
     parameters {
-        choice(name: 'ENVIRONMENT', choices: ['main', 'dev'], description: 'Select environment')
+        choice(name: 'ENVIRONMENT', choices: ['main', 'dev'])
+    }
+    environment {
+        DOCKER_HUB = "your-dockerhub-username"
+        PORT = "${params.ENVIRONMENT == 'main' ? '3000' : '3001'}"
+        CONTAINER_NAME = "${params.ENVIRONMENT == 'main' ? 'nodemain' : 'nodedev'}"
+        IMAGE_TAG = "v1.0"
     }
     stages {
         stage('Deploy') {
             steps {
-                script {
-                    def port = (params.ENVIRONMENT == 'main') ? "3000" : "3001"
-                    def containerName = (params.ENVIRONMENT == 'main') ? "nodemain" : "nodedev"
-                    def imageName = (params.ENVIRONMENT == 'main') ? 
-                        "nodemain:latest" : 
-                        "nodedev:latest"
-                    sh "docker stop ${containerName} || true"
-                    sh "docker rm ${containerName} || true"
-                    sh "docker run -d -p ${port}:${port} --name ${containerName} ${imageName}"
-                }
+                sh "docker stop ${CONTAINER_NAME} || true"
+                sh "docker rm ${CONTAINER_NAME} || true"
+                sh "docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${DOCKER_HUB}/${CONTAINER_NAME}:${IMAGE_TAG}"
             }
         }
     }
