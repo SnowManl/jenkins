@@ -11,7 +11,6 @@ pipeline {
             steps {
                 checkout scm
                 script {
-                    // Replace logo.svg based on branch
                     sh """
                         rm -f public/logo.svg
                         cp public/logo-${env.BRANCH_NAME}.svg public/logo.svg
