@@ -1,5 +1,5 @@
 FROM node:7.8.0
 WORKDIR /opt
-ADD . /opt
+COPY . .
 RUN npm install
-ENTRYPOINT npm run startENV PORT=3001
+CMD ["npm", "run", "start:dev"]
