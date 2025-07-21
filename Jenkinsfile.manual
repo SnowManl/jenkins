@@ -4,7 +4,7 @@ pipeline {
         choice(name: 'ENVIRONMENT', choices: ['main', 'dev'])
     }
     environment {
-        DOCKER_HUB = "your-dockerhub-username"
+        DOCKER_HUB = "snowmanf"
         PORT = "${params.ENVIRONMENT == 'main' ? '3000' : '3001'}"
         CONTAINER_NAME = "${params.ENVIRONMENT == 'main' ? 'nodemain' : 'nodedev'}"
         IMAGE_TAG = "v1.0"
